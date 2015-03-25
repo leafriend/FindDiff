@@ -99,7 +99,7 @@ public class FindDiff {
         byte[] rbuf = new byte[1024 * 1024];
         int llen;
         int rlen;
-        String stat;
+        String stat = "";
         long length = lFile.length();
         long offset = 0;
         int w = String.valueOf(length).length();
@@ -107,16 +107,15 @@ public class FindDiff {
         try {
             lin = new FileInputStream(lFile);
             rin = new FileInputStream(rFile);
-            stat = ": " + String.format("%6.2f", ((double) offset * 100) / length) + "% (" + String.format("%," + w + "d", offset) + "/" + String.format("%," + w + "d", length) + ")";
             while ((llen = lin.read(lbuf)) > 0) {
                 offset += llen;
-                System.out.print(stat);
                 if ((rlen = rin.read(rbuf)) != llen) {
                     // TODO handle rest bytes
                     throw new RuntimeException(llen + " != " + rlen);
                 }
                 for (int i = 0; i < llen; i++) {
                     if (lbuf[i] != rbuf[i]) {
+                        clear(stat, false);
                         clear(head, false);
                         System.out.println("*   " + path);
                         return;
@@ -124,10 +123,11 @@ public class FindDiff {
                 }
                 clear(stat, false);
                 stat = ": " + String.format("%6.2f", ((double) offset * 100) / length) + "% (" + String.format("%," + w + "d", offset) + "/" + String.format("%," + w + "d", length) + ")";
+                System.out.print(stat);
             }
-            System.out.print(stat);
             clear(stat, true);
             clear(head, true);
+            return;
         } catch (IOException e) {
             clear(head, false);
             System.out.println("!   " + path);
