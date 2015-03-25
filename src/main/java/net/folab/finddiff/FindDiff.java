@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -161,14 +162,15 @@ public class FindDiff {
     }
 
     public static void clear(String path, boolean whitening) {
-        for (int i = 0; i < path.length(); i++) {
+        int length = path.getBytes(Charset.defaultCharset()).length;
+        for (int i = 0; i < length; i++) {
             System.out.print("\b");
         }
         if (whitening) {
-            for (int i = 0; i < path.length(); i++) {
+            for (int i = 0; i < length; i++) {
                 System.out.print(" ");
             }
-            for (int i = 0; i < path.length(); i++) {
+            for (int i = 0; i < length; i++) {
                 System.out.print("\b");
             }
         }
