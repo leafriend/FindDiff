@@ -1,11 +1,11 @@
 package net.folab.finddiff;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -90,7 +90,13 @@ public class FindDiff {
         System.out.print(head);
         if (lFile.length() != rFile.length()) {
             clear(head, false);
-            System.out.println("*   " + path);
+            if (lFile.lastModified() > rFile.lastModified()) {
+                System.out.println(">   " + path);
+            } else if (lFile.lastModified() < rFile.lastModified()) {
+                System.out.println("<   " + path);
+            } else {
+                System.out.println("<>  " + path);
+            }
             return;
         }
         FileInputStream lin = null;
@@ -117,7 +123,13 @@ public class FindDiff {
                     if (lbuf[i] != rbuf[i]) {
                         clear(stat, false);
                         clear(head, false);
-                        System.out.println("*   " + path);
+                        if (lFile.lastModified() > rFile.lastModified()) {
+                            System.out.println(">   " + path);
+                        } else if (lFile.lastModified() < rFile.lastModified()) {
+                            System.out.println("<   " + path);
+                        } else {
+                            System.out.println("<>  " + path);
+                        }
                         return;
                     }
                 }
